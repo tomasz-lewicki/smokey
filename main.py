@@ -1,15 +1,15 @@
 import tornado.ioloop
 import tornado.web
 
-from sensor import Pms7003Thread
+from pms7003 import Pms7003Thread
 
 class ValueHandler(tornado.web.RequestHandler):
     def get(self):
-        self.write(t.measurements)
+        self.write(sensor.measurements)
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
-        m = t.measurements
+        m = sensor.measurements
 
         self.render(
             "main.html",
@@ -23,7 +23,7 @@ class MainHandler(tornado.web.RequestHandler):
 def make_app():
 
     handlers = [
-        (r"/values/?", ValueHandler),
+        (r"/measurements/?", ValueHandler),
         (r"/?", MainHandler)
         ]
 
@@ -31,11 +31,10 @@ def make_app():
 
 if __name__ == "__main__":
 
-    t = Pms7003Thread("/dev/serial0")
-    t.start()
+    with Pms7003Thread("/dev/serial0") as sensor:
 
-    app = make_app()
-    app.listen(8888)
-    tornado.ioloop.IOLoop.current().start()
+        app = make_app()
+        app.listen(8888)
+        tornado.ioloop.IOLoop.current().start()
 
 
