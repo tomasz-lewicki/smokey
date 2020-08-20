@@ -1,0 +1,25 @@
+<head>
+	<!-- Load plotly.js into the DOM -->
+	<script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+</head>
+
+<body>
+	<div id='myDiv' style="width: 50vw"><!-- Plotly chart will be drawn inside this DIV --></div>
+
+
+<script>
+
+var data = [
+  {
+    x: ['pm10', "pm2.5"],
+    y: {{ values }},
+    type: 'bar'
+  }
+];
+
+Plotly.newPlot('myDiv', data);
+
+</script>
+
+
+</body>
