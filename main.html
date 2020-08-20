@@ -11,16 +11,36 @@
         <div id="chart-pm10"></div>
         <div id="chart-pm2_5"></div>
         <script>
-          
-            Plotly.plot('chart-pm10',[{
-                y:[0],
-                type:'line'
-            }]);
 
-            Plotly.plot('chart-pm2_5',[{
+
+            var layout_pm10 = {
+            title: 'PM 10 [ug/m3]',
+            xaxis: {
+                type: 'date'
+            },
+            yaxis: {
+                autorange: true,
+                range: [0,50],
+                type: 'linear'
+            }
+            };
+
+            var layout_pm2_5 = Object.assign({}, layout_pm10)
+            layout_pm2_5.title = 'PM 2.5 [ug/m3]'
+
+            Plotly.plot('chart-pm10',[{
+                x: [new Date()],
                 y:[0],
                 type:'line'
-            }]);
+            }], layout_pm10);
+
+
+            // start PM2.5 plot
+            Plotly.plot('chart-pm2_5',[{
+                x: [new Date()],
+                y:[0],
+                type:'line'
+            }], layout_pm2_5);
             
             var cnt = 0;
             
@@ -28,8 +48,8 @@
             {
                 let response = await fetch("measurements");
                 let value = await response.json();
-                Plotly.extendTraces('chart-pm10',{ y:[[value['pm10']]]}, [0]);
-                Plotly.extendTraces('chart-pm2_5',{ y:[[value['pm2_5']]]}, [0]);
+                Plotly.extendTraces('chart-pm10', {x: [[new Date()]], y:[[value['pm10']]]}, [0]);
+                Plotly.extendTraces('chart-pm2_5',{x: [[new Date()]], y:[[value['pm2_5']]]}, [0]);
                 setTimeout(update, 1000); 
             }
 
@@ -40,13 +60,13 @@
                 if(cnt > 20) {
                     Plotly.relayout('chart-pm10',{
                         xaxis: {
-                            range: [cnt-20,cnt]
+                            range: [new Date() - 20000, new Date()]
                         }
                     });
 
                     Plotly.relayout('chart-pm2_5',{
                         xaxis: {
-                            range: [cnt-20,cnt]
+                            range: [new Date() - 20000, new Date()]
                         }
                     });
                 }
