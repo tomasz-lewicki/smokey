@@ -1,0 +1,13 @@
+#place this file in /etc/systemd/system
+[Unit]
+Description=Service running an air quality station project
+
+[Service]
+User=pi
+ExecStart=/usr/bin/python3 /home/pi/smokey/main.py
+StandardOutput=syslog
+
+[Install]
+WantedBy=multi-user.target
+Alias=smokey
+
