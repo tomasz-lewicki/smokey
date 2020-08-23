@@ -8,7 +8,7 @@ import time
 from pms7003 import Pms7003Thread
 
 config = {
-    "node_id": 1,
+    "node_id": "1",
     "serial_port": "/dev/serial0",
     "uri": "http://54.215.180.216/"
 }
