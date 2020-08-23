@@ -6,6 +6,7 @@ Description=Service running an air quality station project
 User=pi
 ExecStart=/usr/bin/python3 /home/pi/smokey/main.py
 StandardOutput=syslog
+Restart=always
 
 [Install]
 WantedBy=multi-user.target
