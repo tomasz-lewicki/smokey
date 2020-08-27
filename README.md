@@ -1,3 +1,9 @@
+# Smokey. Monitor real-time PM levels in your area.
+
+Real-time PM results in the browser:
+
+![real-time PM results as seen in the browser](smokey.gif)
+
 # Quickstart
 
 1. Install
@@ -12,8 +18,6 @@ python3 main.py
 2. Navigate your browser to your pi's IP address on port 8888. For me it's: [http://192.168.0.11:8888](http://192.168.0.11:8888). If your pi has avahi installed, [http://raspberrypi.local:8888/](http://raspberrypi.local:8888/) should work too.
 
 3. See real-time PM-level data in your area!
-
-![real-time PM results as seen in the browser](smokey.gif)
 
 # Run as a service
 
