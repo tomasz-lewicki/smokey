@@ -1,77 +1,102 @@
-<html>
-    <head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Plolty JS -->
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="styles.css">
-    </head>
-    <body>
-    <div class="navbar"><h1>Smoke monitoring station</h1></div>
-    <div class="wrapper">
 
-        <div id="chart-pm10"></div>
-        <div id="chart-pm2_5"></div>
-        <script>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <title>Smoke monitoring station</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <a class="navbar-brand" href="#">Air Quality Measuring Station</a>
+    </nav>
+
+    <div class="container">
+        <div class="col" id="chart-pm10"></div>
+        <div class="col" id="chart-pm2_5"></div>
+    </div>
+    <script>
 
 
-            var layout_pm10 = {
+        var layout_pm10 = {
             title: 'PM 10 [ug/m3]',
             xaxis: {
                 type: 'date'
             },
             yaxis: {
                 autorange: true,
-                range: [0,50],
+                range: [0, 50],
                 type: 'linear'
             }
-            };
+        };
 
-            var layout_pm2_5 = Object.assign({}, layout_pm10)
-            layout_pm2_5.title = 'PM 2.5 [ug/m3]'
+        var layout_pm2_5 = Object.assign({}, layout_pm10)
+        layout_pm2_5.title = 'PM 2.5 [ug/m3]'
 
-            Plotly.plot('chart-pm10',[{
-                x: [new Date()],
-                y:[0],
-                type:'line'
-            }], layout_pm10);
+        Plotly.plot('chart-pm10', [{
+            x: [new Date()],
+            y: [0],
+            type: 'line'
+        }], layout_pm10);
 
 
-            // start PM2.5 plot
-            Plotly.plot('chart-pm2_5',[{
-                x: [new Date()],
-                y:[0],
-                type:'line'
-            }], layout_pm2_5);
-            
-            var cnt = 0;
-            
-            async function update()
-            {
-                let response = await fetch("measurements");
-                let value = await response.json();
-                Plotly.extendTraces('chart-pm10', {x: [[new Date()]], y:[[value['pm10']]]}, [0]);
-                Plotly.extendTraces('chart-pm2_5',{x: [[new Date()]], y:[[value['pm2_5']]]}, [0]);
-                setTimeout(update, 1000); 
+        // start PM2.5 plot
+        Plotly.plot('chart-pm2_5', [{
+            x: [new Date()],
+            y: [0],
+            type: 'line'
+        }], layout_pm2_5);
+
+        var cnt = 0;
+
+        async function update() {
+            let response = await fetch("measurements");
+            let value = await response.json();
+            Plotly.extendTraces('chart-pm10', { x: [[new Date()]], y: [[value['pm10']]] }, [0]);
+            Plotly.extendTraces('chart-pm2_5', { x: [[new Date()]], y: [[value['pm2_5']]] }, [0]);
+            setTimeout(update, 1000);
+        }
+
+        setTimeout(update, 1000);
+
+        setInterval(function () {
+            cnt++;
+            if (cnt > 20) {
+                Plotly.relayout('chart-pm10', {
+                    xaxis: {
+                        range: [new Date() - 20000, new Date()]
+                    }
+                });
+
+                Plotly.relayout('chart-pm2_5', {
+                    xaxis: {
+                        range: [new Date() - 20000, new Date()]
+                    }
+                });
             }
+        }, 1000);
+    </script>
 
-            setTimeout(update, 1000); 
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+</body>
 
-            setInterval(function(){
-                cnt++;
-                if(cnt > 20) {
-                    Plotly.relayout('chart-pm10',{
-                        xaxis: {
-                            range: [new Date() - 20000, new Date()]
-                        }
-                    });
-
-                    Plotly.relayout('chart-pm2_5',{
-                        xaxis: {
-                            range: [new Date() - 20000, new Date()]
-                        }
-                    });
-                }
-            },1000);
-        </script>
-    </div>
-    </body>
 </html>
