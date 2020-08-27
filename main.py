@@ -1,17 +1,12 @@
 import tornado.ioloop
 import tornado.web
 
-import requests
 from datetime import timedelta
+import requests
 import time
+import json
 
 from pms7003 import Pms7003Thread
-
-config = {
-    "node_id": "1",
-    "serial_port": "/dev/serial0",
-    "uri": "http://54.215.180.216/"
-}
 
 class ValueHandler(tornado.web.RequestHandler):
     def get(self):
@@ -58,10 +53,11 @@ def send_measurement():
 
 if __name__ == "__main__":
 
+    with open("/home/pi/smokey/config.json", "r") as f:
+        config = json.loads(f.read())
+
     with Pms7003Thread(config["serial_port"]) as sensor:
         send_measurement()
         app = make_app()
         app.listen(8888)
         tornado.ioloop.IOLoop.current().start()
-
-
