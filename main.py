@@ -54,7 +54,7 @@ if __name__ == "__main__":
         config = json.loads(f.read())
 
     with Pms7003Thread(config["serial_port"]) as sensor:
-        send_measurement()
+        # send_measurement()
         app = make_app()
         app.listen(8888)
         tornado.ioloop.IOLoop.current().start()
