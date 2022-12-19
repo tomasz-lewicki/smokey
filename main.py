@@ -1,41 +1,22 @@
-import tornado.ioloop
-import tornado.web
-
-from datetime import timedelta
-import requests
 import time
-import json
+from pms7003.pms7003 import Pms7003Sensor
 
-from pms7003 import Pms7003Thread
+from db import DB
+from server import WebServer
 
-
-class ValueHandler(tornado.web.RequestHandler):
-    def get(self):
-        self.write(sensor.measurements)
-
-
-class MainHandler(tornado.web.RequestHandler):
-    def get(self):
-        m = sensor.measurements
-
-        self.render(
-            "main.html", pollutants=list(m.keys()), values=[m["pm10"], m["pm2_5"]]
-        )
-
-
-def make_app():
-
-    handlers = [(r"/measurements/?", ValueHandler), (r"/?", MainHandler)]
-
-    return tornado.web.Application(handlers, debug=True)
-
-
+# breakpoint()
 if __name__ == "__main__":
 
-    with open("/home/pi/smokey/config.json", "r") as f:
-        config = json.loads(f.read())
+    db = DB("measurements.db")
+    print("DB initialized!")
+    server = WebServer(port=8888)
+    print("Web Server Started!")
+    sensor = Pms7003Sensor("/dev/serial0")
+    print("Sensor Started!")
 
-    with Pms7003Thread(config["serial_port"]) as sensor:
-        app = make_app()
-        app.listen(8888)
-        tornado.ioloop.IOLoop.current().start()
+    while True:
+        m = sensor.read()
+        print(m)
+        db.insert(pm2_5=m['pm2_5'], pm10=m['pm10'])
+        time.sleep(1)
+
