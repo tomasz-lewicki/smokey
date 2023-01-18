@@ -2,6 +2,7 @@ import time
 from pms7003.pms7003 import Pms7003Sensor
 
 from db import DB
+from pms7003.pms7003.pms7003 import PmsSensorException
 from server import WebServer
 
 # breakpoint()
@@ -15,8 +16,13 @@ if __name__ == "__main__":
     print("Sensor Started!")
 
     while True:
-        m = sensor.read()
-        print(m)
-        db.insert(pm2_5=m['pm2_5'], pm10=m['pm10'])
-        time.sleep(1)
+        try:
+            m = sensor.read()
+            print(m)
+            db.insert(pm2_5=m['pm2_5'], pm10=m['pm10'])
+            time.sleep(1)
+        except PmsSensorException as e:
+            print(f"ERROR: {e}. Not inserting to DB. Trying again in 1 second.")
+
+
 
