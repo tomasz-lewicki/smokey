@@ -2,7 +2,7 @@ import time
 from pms7003.pms7003 import Pms7003Sensor
 
 from db import DB
-from pms7003.pms7003.pms7003 import PmsSensorException
+from pms7003.pms7003 import PmsSensorException
 from server import WebServer
 
 # breakpoint()
