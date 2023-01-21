@@ -29,3 +29,9 @@ sudo systemctl enable smokey.service
 # Potential issues
 
 1. Make sure the serial port in `config.json` matches the port you connected your PMS7003 to. In most cases it will be `"/dev/serial0"`, so I left that as a default.
+
+## Enable neopixels:
+
+```bash
+sudo raspi-config # Interfacting options -> SPI -> enable
+``` 
