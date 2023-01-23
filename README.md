@@ -26,6 +26,11 @@ sudo cp smokey.service /etc/systemd/system
 sudo systemctl enable smokey.service
 ```
 
+## Run neopixels from jupyter notebook
+```shell
+sudo sh -c "jupyter notebook --allow-root --ip=0.0.0.0"
+```
+
 # Potential issues
 
 1. Make sure the serial port in `config.json` matches the port you connected your PMS7003 to. In most cases it will be `"/dev/serial0"`, so I left that as a default.

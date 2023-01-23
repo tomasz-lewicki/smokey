@@ -1,2 +1,7 @@
 pms7003>=1.1.0
 tornado
+# Neopixels
+rpi_ws281x
+adafruit-circuitpython-neopixel
+adafruit-blinka
+adafruit-circuitpython-neopixel-spi
